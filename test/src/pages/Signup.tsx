@@ -1,5 +1,18 @@
 import { useState } from "react";
 
+const sportsPositions: { [key: string]: string[] } = {
+  football: ["Goalkeeper", "Defender", "Midfielder", "Forward"],
+  cricket: [
+    "Batsman",
+    "Bowler",
+    "All-Rounder",
+    "Wicket-Keeper",
+    "Opening Batsman",
+    "Fast Bowler",
+    "Spin Bowler",
+  ],
+};
+
 const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -33,7 +46,7 @@ const Signup = () => {
 
       if (response.ok) {
         alert("Signup successful!");
-        window.location.href = "/login"; // Redirect to login
+        window.location.href = "/login";
       } else {
         alert(data.error || "Signup failed");
       }
@@ -87,24 +100,34 @@ const Signup = () => {
 
           {formData.role === "player" && (
             <>
-              <input
-                type="text"
+              <select
                 name="sport"
-                placeholder="Sport"
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={handleChange}
                 value={formData.sport}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={handleChange}
                 required
-              />
-              <input
-                type="text"
-                name="position"
-                placeholder="Position"
-                value={formData.position}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={handleChange}
-                required
-              />
+              >
+                <option value="">Select Sport</option>
+                <option value="football">Football</option>
+                <option value="cricket">Cricket</option>
+              </select>
+              
+              {formData.sport && (
+                <select
+                  name="position"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  onChange={handleChange}
+                  value={formData.position}
+                  required
+                >
+                  <option value="">Select Position</option>
+                  {sportsPositions[formData.sport]?.map((pos) => (
+                    <option key={pos} value={pos}>
+                      {pos}
+                    </option>
+                  ))}
+                </select>
+              )}
               <input
                 type="number"
                 name="height"
